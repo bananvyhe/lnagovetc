@@ -1,0 +1,20 @@
+.env
+.DS_Store
+/log
+/tmp
+
+# Ruby / Rails
+/backend/log/*
+/backend/tmp/*
+/backend/storage/*
+/backend/.bundle
+/backend/vendor/bundle
+/backend/db/*.sqlite3
+/backend/node_modules
+
+# Frontend
+/frontend/node_modules
+/frontend/dist
+
+# Docker helper artifacts
+/docker-data

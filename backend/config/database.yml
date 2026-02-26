@@ -1,0 +1,29 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
+  username: <%= ENV.fetch("POSTGRES_USER", "postgres") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "postgres") %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "lnagovetc_development") %>
+
+test:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB_TEST", "lnagovetc_test") %>
+
+production:
+  primary:
+    url: <%= ENV.fetch("DATABASE_URL") %>
+
+  cable:
+    url: <%= ENV.fetch("DATABASE_URL") %>
+
+  queue:
+    url: <%= ENV.fetch("DATABASE_URL") %>
+
+  cache:
+    url: <%= ENV.fetch("DATABASE_URL") %>
