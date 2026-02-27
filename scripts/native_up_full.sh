@@ -9,7 +9,7 @@ cd "$ROOT_DIR"
 mkdir -p tmp/pids log
 
 if [[ ! -f tmp/pids/sidekiq.pid ]]; then
-  sidekiq_cmd="bundle exec sidekiq"
+  sidekiq_cmd="ruby -S bundle exec sidekiq"
   if command -v mise >/dev/null 2>&1; then
     sidekiq_cmd="mise exec -- $sidekiq_cmd"
   fi

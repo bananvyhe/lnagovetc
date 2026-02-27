@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 .PHONY: bootstrap up up-full down logs shell test hello doctor \
-	bootstrap-native up-native up-native-full down-native test-native
+	bootstrap-native up-native up-native-full down-native test-native import-db
 
 bootstrap:
 	./scripts/bootstrap.sh
@@ -26,6 +26,15 @@ up-native-full:
 
 down-native:
 	./scripts/native_down.sh
+
+import-db:
+	@if [ -z "$(DUMP)" ] && [ -z "$(PROD_URL)" ]; then \
+		echo "Usage: make import-db DUMP=/path/to/dump.sql"; \
+		echo "   or: make import-db PROD_URL=postgres://user:pass@host:5432/db"; \
+		exit 1; \
+	fi
+	@if [ -n "$(DUMP)" ]; then ./scripts/import_production_db.sh --yes --dump "$(DUMP)"; fi
+	@if [ -n "$(PROD_URL)" ]; then ./scripts/import_production_db.sh --yes --prod-url "$(PROD_URL)"; fi
 
 logs:
 	docker compose logs -f --tail=200

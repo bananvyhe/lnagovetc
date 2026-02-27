@@ -79,7 +79,7 @@ if [[ -f tmp/pids/rails.pid ]]; then
   exit 0
 fi
 
-rails_cmd="bundle exec rails server -b 0.0.0.0 -p 3000"
+rails_cmd="ruby -S bundle exec ruby bin/rails server -b 0.0.0.0 -p 3000"
 if command -v mise >/dev/null 2>&1; then
   rails_cmd="mise exec -- $rails_cmd"
 fi

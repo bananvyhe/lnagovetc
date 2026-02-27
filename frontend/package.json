@@ -9,7 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.25"
+    "@mdi/js": "^7.4.47",
+    "axios": "^1.8.4",
+    "gsap": "^3.13.0",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
+    "vue": "^3.5.25",
+    "vue-datepicker-next": "^1.0.3",
+    "vue-router": "^4.5.1",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuetify": "^3.12.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.2",

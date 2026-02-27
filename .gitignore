@@ -1,4 +1,5 @@
 .env
+.env.*
 .DS_Store
 /log
 /tmp
@@ -18,3 +19,9 @@
 
 # Docker helper artifacts
 /docker-data
+
+# Secrets
+/backend/config/master.key
+/backend/config/credentials/*.key
+/backend/.env
+/backend/.env.*
