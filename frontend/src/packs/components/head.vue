@@ -172,7 +172,7 @@
               <div class="bgdfa   "> </div>
               <div class="bgdfb  "> </div>
               <div class=" subti flex-row  "> психолог–психоаналитик<br><div class="pb-1 subti-phone" style="text-align: center;">
-                  <a class="subti-phone-link" href="tel:+79193814826" >тел. +7(919) 381 4826</a>
+                  <a class="subti-phone-link" :href="'tel:'+ tel" >тел. {{tel}}</a>
               </div> 
             </div>
 
@@ -183,7 +183,7 @@
  
             </div>
           </div>  
-                  <div class="posred" v-if="isAdmin">
+                  <div class="posred" v-admin="isAdmin">
                     <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                       <template v-slot:activator="{ props }">
@@ -222,22 +222,24 @@
                           </v-form>
                         </v-card>                    
                       </v-menu>
-                    </div>      
+                    </div>
         </v-container>
       </div>
     </template>
 <script setup>
-import { computed, getCurrentInstance, nextTick, onMounted, ref } from "vue"
+import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useLogStore } from "store.js"
+import { useAdmin } from "../../composables/useAdmin"
 import Profile from "../../packs/components/Profile.vue"
 import gsap from "gsap"
 import { mdiMenu } from "@mdi/js"
 
 const router = useRouter()
 const logStore = useLogStore()
-const { currentUser, signedIn } = storeToRefs(logStore)
+const { signedIn } = storeToRefs(logStore)
+const { isAdmin } = useAdmin()
 const { proxy } = getCurrentInstance()
 
 const closeOnContentClick = ref(false)
@@ -264,8 +266,6 @@ const nameRules = [
   (v) => !!v || "Ваше имя?",
   (v) => (v && v.length <= 45) || "Вы превысили лимит 45 знаков",
 ]
-
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 
 const gettel = async () => {
   try {
@@ -545,55 +545,69 @@ margin-top: 14px;
   font-weight: 500;
   letter-spacing: 0.3px;
   line-height: 1.2;
-  padding: 5px 8px;
+  padding: 4px 8px;
   z-index: 1;
 }
 .titleb .subti{
-  width: 430px;
+  width: auto;
+    display: inline-flex;
     margin-top: 2px;
     margin-left: 50px;
-    text-shadow: rgba(255, 255, 255, 0.28) 0 1px 1px;
-  background-color: rgba(96, 102, 110, 0.22);
-  color: #1f2224;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 1px 1px;
+  background-color: rgba(86, 91, 99, 0.16);
+  color: #1b1d1f;
   font-size: 16px;
   position: absolute;
+  white-space: nowrap;
 }
 .titles .subti{
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   margin-top: 72px;
   margin-left: 33px;
-  text-shadow: rgba(255, 255, 255, 0.25) 0 1px 1px;
-  background-color: rgba(96, 102, 110, 0.22);
-  color: #f7f7f7;
-  font-size: 14px;
+  text-shadow: rgba(0, 0, 0, 0.14) 0 1px 1px;
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.45px;
+  text-transform: uppercase;
   max-width: 320px;
   position: absolute;
 }
 .subti-phone {
-  margin-left: 14px;
+  margin-left: 10px;
 }
 .subti-phone-link {
   color: #1f2224 !important;
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.1px;
 }
 
 .titles .subti .subti-phone-link {
-  color: #f4f4f4 !important;
+  color: #ffffff !important;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 @media (max-width: 599px) {
   .titles .subti {
     margin-left: 22px;
-    margin-top: 70px;
-    padding: 7px 9px;
-    font-size: 14px;
+    margin-top: 68px;
+    padding: 6px 10px;
+    font-size: 12px;
+    max-width: 342px;
   }
   .titles .subti a {
-    font-size: 14px;
+    font-size: 12px;
+  }
+  .titleb .subti {
+    margin-left: 44px;
+    font-size: 15px;
+  }
+  .subti-phone {
+    margin-left: 8px;
   }
 }
 .titleb .nagovets{

@@ -9,7 +9,7 @@
                 <h4>Консультирую:</h4>
                   <div class="body-1 my-2 mb-1">
                     <span v-html="contacts[0]?.desc || ''"></span>
-                    <div class="desc " v-if="isAdmin">
+                    <div class="desc" v-admin="isAdmin">
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -53,7 +53,7 @@
                   </div> 
                   <div class="body-1 mt-0 mb-3">
                     <span v-html="contacts[1]?.desc || ''"></span>
-                    <div class="desc" v-if="isAdmin">
+                    <div class="desc" v-admin="isAdmin">
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -97,7 +97,7 @@
                   </div> 
                   <div class="body-1 mt-0 mb-3">
                       <span v-html="contacts[2]?.desc || ''"></span>
-                    <div class="desc" v-if="isAdmin">
+                    <div class="desc" v-admin="isAdmin">
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -160,7 +160,7 @@
             <div class="address-map-popover" v-html="mapEmbedHtml"></div>
           </div>
 <v-container > 
-                    <div class=" " v-if="isAdmin">редактор карты:
+                    <div class=" " v-admin="isAdmin">редактор карты:
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -224,12 +224,10 @@
 
 <script setup>
 import { computed, getCurrentInstance, onMounted, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useLogStore } from "store.js"
+import { useAdmin } from "./composables/useAdmin"
 
-const logStore = useLogStore()
-const { currentUser } = storeToRefs(logStore)
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
 
 const closeOnContentClick = ref(false)
 const contacts = ref([
@@ -238,8 +236,6 @@ const contacts = ref([
   { desc: "", position: "", tel: "" },
 ])
 const econt = ref("")
-
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 
 const getcont = async (dat) => {
   try {
@@ -322,6 +318,7 @@ onMounted(() => {
   position: relative;
   text-align: center;
   width: 100%;
+  padding-bottom: 10px;
  }
 
  .address-trigger {
@@ -339,14 +336,15 @@ onMounted(() => {
   opacity: 0;
   pointer-events: none;
   position: absolute;
-  top: 28px;
+  top: calc(100% - 6px);
   transform: translate(-50%, -4px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   width: min(100%, 740px);
   z-index: 20;
  }
 
- .address-map-wrap:hover .address-map-popover {
+ .address-map-wrap:hover .address-map-popover,
+ .address-map-wrap:focus-within .address-map-popover {
   opacity: 1;
   pointer-events: auto;
   transform: translate(-50%, 0);

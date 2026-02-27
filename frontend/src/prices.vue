@@ -17,7 +17,7 @@
                 <th class="text-left priceHead">
                   <h3>Длительность:</h3>
                 </th>
-                <td v-if="isAdmin" class="text-left priceHead">
+                <td class="text-left priceHead" v-admin="isAdmin">
                   редактировать:
                 </td>
               </tr>
@@ -29,7 +29,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.cost }}&nbsp;руб.</td>
                 <td>{{ item.duration }}</td>
-                <td v-if="isAdmin">
+                <td v-admin="isAdmin">
                   <div class="my-2">
                     <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
@@ -128,7 +128,7 @@
             </tbody>
           </template>
         </v-simple-table>
-        <div v-if="isAdmin">
+        <div v-admin="isAdmin">
           <h3>Добавить услугу:</h3>
 
              <v-form>
@@ -190,13 +190,11 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, onMounted, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useLogStore } from "store.js"
+import { getCurrentInstance, onMounted, ref } from "vue"
+import { useAdmin } from "./composables/useAdmin"
 
-const logStore = useLogStore()
-const { currentUser } = storeToRefs(logStore)
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
 
 const delitemid = ref("")
 const hidden = ref(true)
@@ -208,8 +206,6 @@ const gcost = ref("")
 const gname = ref("")
 const closeOnContentClick = ref(false)
 const prices = ref([])
-
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 
 const loadPrices = async () => {
   try {

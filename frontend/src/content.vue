@@ -19,7 +19,7 @@
             </div>              
           </div>
 
-          <div class="posred" v-if="isAdmin">
+          <div class="posred" v-admin="isAdmin">
             <v-menu offset-y
               :close-on-content-click="closeOnContentClick">
               <template v-slot:activator="{ props }">
@@ -59,13 +59,13 @@
                 </v-form>
               </v-card>                    
             </v-menu>
-          </div> 
+          </div>
 
           <div class="konsultBlock mb-3 mt-2 px-2">
             <h2>Как проходит консультация?</h2>
             <span >{{consult}}</span>
 
-            <div class="posred" v-if="isAdmin">
+            <div class="posred" v-admin="isAdmin">
               <v-menu offset-y
                 :close-on-content-click="closeOnContentClick">
                 <template v-slot:activator="{ props }">
@@ -105,7 +105,7 @@
                   </v-form>
                 </v-card>                    
               </v-menu>
-            </div> 
+            </div>
 
             </div>
             <div class="zaprosBlock ">
@@ -123,7 +123,7 @@
                   :key="item.name"> 
                   <li>
                     {{item.position}}
-<div v-if="isAdmin"  class="pt-2">
+<div class="pt-2" v-admin="isAdmin">
                     <v-btn
                     class="mx-2"
                     x-small
@@ -143,11 +143,11 @@
                     @click="delitem(item.id)">
                       удал
                     </v-btn>
-</div>                    
+</div>
                   </li>
                 </ul>
 
-                <div v-if="isAdmin"  class="pt-2">
+                <div class="pt-2" v-admin="isAdmin">
                   <h3>Добавить:</h3>
 
                   <v-form>
@@ -171,11 +171,11 @@
                       </v-btn>
                       </div>
                     </v-container>
-                  </v-form>    
-                </div>
+	                  </v-form>    
+	                </div>
 
-              </div>
-            </v-container>
+	              </div>
+	            </v-container>
           </div>
         </v-col>
             
@@ -186,11 +186,11 @@
                 <h2>Образование</h2>  
               </div>
 
-              <div v-for="(item, index) in filteredListtrue" > 
-                <div class="py-1 px-4">
-                  {{index+1+"."}}   {{item.desc}}
-                </div>
-              </div>  
+	              <div v-for="(item, index) in filteredListtrue" > 
+	                <div class="py-1 px-4">
+	                  {{index+1+"."}}   {{item.desc}}
+	                </div>
+	              </div>  
 
               <div>
                Прошла дополнительное обучение по профессиональным программам: 
@@ -200,7 +200,7 @@
                   <li>
                     {{item.desc}}
 
-<div v-if="isAdmin"  class="pt-2">
+<div class="pt-2" v-admin="isAdmin">
                     <v-btn
                     class="mx-2"
                     x-small
@@ -228,7 +228,7 @@
                 </ul>
               </div> 
 
-                <div v-if="isAdmin"  class="pt-2">
+                <div class="pt-2" v-admin="isAdmin">
                   <h3>Добавить:</h3>
 
                   <v-form>
@@ -266,13 +266,11 @@
 
 <script setup>
 import { computed, getCurrentInstance, onMounted, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useLogStore } from "store.js"
+import { useAdmin } from "./composables/useAdmin"
 import gsap from "gsap"
 
-const logStore = useLogStore()
-const { currentUser } = storeToRefs(logStore)
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
 
 const hiddened = ref(true)
 const delitemided = ref("")
@@ -286,7 +284,6 @@ const closeOnContentClick = ref(false)
 const consult = ref("")
 const about = ref("")
 
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 const isCompactLayout = computed(() => {
   const vuetifyObj = proxy?.$vuetify || {}
   const display = vuetifyObj.display || {}

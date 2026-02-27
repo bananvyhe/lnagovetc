@@ -27,3 +27,14 @@ body {
 a {
   text-decoration: none;
 }
+
+/* Keep layout width close to the original site on large screens */
+.v-container {
+  max-width: 1185px !important;
+}
+
+@media (min-width: 1264px) {
+  .v-container {
+    max-width: 1185px !important;
+  }
+}

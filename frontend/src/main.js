@@ -67,6 +67,16 @@ app.config.globalProperties.$http = {
   plain: plainAxiosInstance,
 }
 app.config.globalProperties.$vuetify = { breakpoint, goTo }
+app.directive("admin", {
+  mounted(el, binding) {
+    if (!binding.value) {
+      el.style.display = "none"
+    }
+  },
+  updated(el, binding) {
+    el.style.display = binding.value ? "" : "none"
+  },
+})
 app.mixin({
   methods: {
     setError(error, message) {

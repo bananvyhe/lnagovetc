@@ -47,7 +47,7 @@
         <div  class="d-flex flex-column">
           {{ currentUser.email}}  
           <div class="px-2 py-2 d-flex flex-column">
-            <router-link  to="/admin/use" v-if="isAdmin">пользователи</router-link>   
+            <router-link to="/admin/use" v-admin="isAdmin">пользователи</router-link>
             <!-- <router-link  to="/admin/red" v-if="this.currentUser.role == 'admin'">редактор</router-link>              -->
           </div>
 
@@ -75,24 +75,24 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, ref } from "vue"
+import { getCurrentInstance, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useLogStore } from "store.js"
+import { useAdmin } from "../../composables/useAdmin"
 import Signin from "../../packs/components/Signin.vue"
 import Signup from "../../packs/components/Signup.vue"
 
 const router = useRouter()
 const logStore = useLogStore()
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
 
 const { currentUser, signedIn } = storeToRefs(logStore)
 
 const regwin = ref(false)
 const menuOpen = ref(false)
 const closeOnContentClick = ref(false)
-
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 
 const onAuthSuccess = () => {
   regwin.value = false
