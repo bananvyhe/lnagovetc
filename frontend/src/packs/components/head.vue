@@ -570,8 +570,9 @@ margin-top: 14px;
   background-color: rgba(255, 255, 255, 0.16);
   color: #fff;
   font-size: 13px;
-  letter-spacing: 0.45px;
-  text-transform: uppercase;
+  font-family: "Roboto Slab";
+  font-weight: 500;
+  letter-spacing: 0.22px;
   max-width: 320px;
   position: absolute;
 }
@@ -598,6 +599,9 @@ margin-top: 14px;
     padding: 6px 10px;
     font-size: 12px;
     max-width: 342px;
+    background-color: rgba(233, 241, 251, 0.18);
+    border-color: rgba(255, 255, 255, 0.36);
+    text-shadow: rgba(0, 0, 0, 0.18) 0 1px 1px;
   }
   .titles .subti a {
     font-size: 12px;

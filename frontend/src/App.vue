@@ -3,7 +3,7 @@
     <v-app >
       <headpart></headpart>  
 
-      <v-main>
+      <v-main class="app-main">
  
         <router-view></router-view>
 
@@ -51,6 +51,9 @@ export default {
 }
 </script>
 
-<style >
-
+<style>
+.app-main {
+  --v-layout-top: 0px !important;
+  padding-top: 0 !important;
+}
 </style>
