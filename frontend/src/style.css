@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Condensed:wght@300&family=Roboto+Slab:wght@400;500;600&display=swap");
 
 *,
 *::before,
@@ -16,12 +16,78 @@ body,
 }
 
 body {
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Roboto Slab", "Roboto", Arial, sans-serif;
   overflow-x: hidden;
 }
 
 #app {
   width: 100%;
+}
+
+.v-application {
+  font-family: "Roboto Slab", "Roboto", Arial, sans-serif !important;
+}
+
+.v-application,
+.v-application .text-body-1,
+.v-application .text-body-2,
+.v-application .v-btn,
+.v-application .v-list-item-title,
+.v-application .v-field,
+.v-application .v-card-text {
+  font-family: "Roboto Slab", "Roboto", Arial, sans-serif;
+}
+
+.v-application h1,
+.v-application h2,
+.v-application h3,
+.v-application h4,
+.v-application h5 {
+  font-family: "Roboto Condensed", "Roboto", Arial, sans-serif;
+  font-weight: 300;
+  line-height: 1.75rem;
+}
+
+.v-application .text-h1,
+.v-application .text-h2,
+.v-application .text-h3,
+.v-application .text-h4,
+.v-application .text-h5,
+.v-application .v-toolbar-title {
+  font-family: "Roboto Condensed", "Roboto", Arial, sans-serif;
+  font-weight: 300;
+}
+
+.v-application h1 {
+  line-height: 2.441rem;
+}
+
+.v-application h2 {
+  line-height: 1.953rem;
+}
+
+.v-application h3 {
+  line-height: 1.56rem;
+}
+
+.v-application h4 {
+  line-height: 1.25rem;
+}
+
+.v-application .text-h1 {
+  line-height: 2.441rem;
+}
+
+.v-application .text-h2 {
+  line-height: 1.953rem;
+}
+
+.v-application .text-h3 {
+  line-height: 1.56rem;
+}
+
+.v-application .text-h4 {
+  line-height: 1.25rem;
 }
 
 .v-main {

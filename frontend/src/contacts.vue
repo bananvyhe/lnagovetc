@@ -319,6 +319,7 @@ onMounted(() => {
   text-align: center;
   width: 100%;
   padding-bottom: 10px;
+  overflow: visible;
  }
 
  .address-trigger {
@@ -332,14 +333,18 @@ onMounted(() => {
  .address-map-popover {
   background: #fff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-  left: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: calc(100vw - 32px);
   opacity: 0;
   pointer-events: none;
   position: absolute;
   top: calc(100% - 6px);
-  transform: translate(-50%, -4px);
+  transform: translateY(-4px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   width: min(100%, 740px);
+  overflow: hidden;
   z-index: 20;
  }
 
@@ -347,13 +352,18 @@ onMounted(() => {
  .address-map-wrap:focus-within .address-map-popover {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
  }
 
  .address-map-popover iframe {
   border: 0;
   display: block;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100%;
+ }
+
+ .address-map-popover a {
+  display: none !important;
  }
 
  @media (max-width: 800px) {
@@ -362,7 +372,8 @@ onMounted(() => {
     opacity: 1;
     pointer-events: auto;
     transform: none;
-    width: 100%;
+    width: min(100%, 740px);
+    max-width: 100%;
   }
  }
 </style>
