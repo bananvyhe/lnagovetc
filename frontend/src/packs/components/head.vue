@@ -1,7 +1,7 @@
    <template>  
     <div>
       <v-app-bar dense fixed flat hide-on-scroll rounded color="transparent" class="appbar">
-        <v-container class= "px-0 ">
+        <v-container class= "px-1 ">
           <div class="d-flex d-sm-flex " > 
             <v-hover>
               <template v-slot:default="{ isHovering, props }">
@@ -675,13 +675,15 @@ margin-top: 14px;
 }
 .head1{
   /*float: left;*/
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   height: 215px;
   width: 201px;
   background-image: url('../../images/head1.jpg');
 }
 .head2{
+    z-index: 1;
+    position: relative;
   /*position: absolute;*/
   height: 215px;
 }
