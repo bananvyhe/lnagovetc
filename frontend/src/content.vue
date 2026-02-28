@@ -12,7 +12,7 @@
                   <h2 >Обо мне </h2>
                 </div>
                 <div class="foto"></div>
-                <span  >
+                <span style >
                 {{about}}
                 </span> 
               </div>
@@ -516,14 +516,7 @@ ul.list6b{
   /*align-self: center;*/
 }
 
-.ikses{ 
-
-  white-space: nowrap;
-  color: #fff !important;
-   /*backdrop-filter: blur(2px);*/
-   background-color: rgb(179.688, 171.652, 147.813, .3);
-  /*text-shadow: 1px 1px 2px #ffffff;*/
-}
+ 
 
 .fotoframe{
  
@@ -579,6 +572,14 @@ ul.list6b{
   background-repeat: repeat-x;
   border-radius: 25px 10px;
 }
+.ikses {
+    white-space: nowrap;
+    color: #fff !important;
+    background-color: rgb(179.688, 171.652, 147.813, .3);
+}
+.ikses h2{
+ text-shadow: 1px 1px rgb(0, 0, 0, .6);
+  }
 .foto{
 
   position: relative;
@@ -588,10 +589,10 @@ ul.list6b{
   /*position: absolute;*/
   z-index: 4;
   float: right;
-  margin-top: -79px;
- 
-  width: 247px;
-  height: 290px;
+  margin-top: -65px;
+  margin-left: -50px;
+  width: 227px;
+  height: 275px;
   background-image: url('./images/foto10.png');
   /*background-color: #dad;*/
 }

@@ -44,8 +44,9 @@ body {
 .v-application h4,
 .v-application h5 {
   font-family: "Roboto Condensed", "Roboto", Arial, sans-serif;
-  font-weight: 300;
+  font-weight: bold;
   line-height: 1.75rem;
+  
 }
 
 .v-application .text-h1,
@@ -101,6 +102,7 @@ a {
 
 /* Keep layout width close to the original site on large screens */
 .v-container {
+  padding: 8px;
   max-width: 1185px !important;
 }
 

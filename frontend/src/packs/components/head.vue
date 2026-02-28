@@ -1,7 +1,7 @@
    <template>  
     <div>
       <v-app-bar dense fixed flat hide-on-scroll rounded color="transparent" class="appbar">
-        <v-container class= "px-1 ">
+        <v-container class= "appbar-inner px-1 ">
           <div class="d-flex d-sm-flex " > 
             <v-hover>
               <template v-slot:default="{ isHovering, props }">
@@ -20,7 +20,7 @@
               </template>
             </v-hover>
             <v-spacer></v-spacer>
-            <div class="d-flex align-center">
+            <div class="d-flex align-center px-1">
               <!-- {{this.signedIn}} -->
               <!-- <div v-if="this.signedIn == true" > -->
               <profile class="d-flex align-center"></profile>
@@ -91,12 +91,14 @@
                     <div class="mb-1 " style="text-align: center;">
                       Встречи проводятся очно или онлайн через мессенджеры:
                     </div>
-                    <div class="d-flex flex-row justify-center">
-                      <a href="https://web.telegram.org/"  target="_blank"><div class="telg mr-2"></div></a>
-                      <a href="https://skype.com/"  target="_blank"><div class="skype mr-2"></div></a>
-                      <a href="https://www.whatsapp.com/"  target="_blank"><div class="whatsapp mr-2"></div></a>
-                      <a href="https://www.viber.com//"  target="_blank"><div class="viber mr-2"></div></a>
-                    </div>              
+                        <div class="d-flex flex-row justify-center">
+
+   
+                      <a href="https://t.me/nagovets/"  target="_blank"><div class="telg mr-2"></div></a>
+                      <a href="https://max.ru/u/f9LHodD0cOJ2BZkoy-hsKrzIqQeCi_sbA9pzKMXtX2mKOjB7UPEiSG1EvZ0"  target="_blank"><div class="skype mr-2"></div></a>
+                      <a href="https://wa.me/79193814826/"  target="_blank"><div class="whatsapp mr-2"></div></a>
+                        </div>
+                                
                   </div>
  
                   <div class="d-flex justify-end">
@@ -109,8 +111,6 @@
                     </v-btn>  
                   </div>
                 </v-form>
-                <v-card-actions>
-                </v-card-actions>
               </v-card>
             </v-dialog>
           </div>
@@ -118,9 +118,11 @@
       </v-app-bar> 
       <v-navigation-drawer
         v-model="drawer" 
+        class="mobile-nav-drawer"
         fixed
         temporary>
         <v-list
+          class="mobile-nav-list"
           nav
           dense>
           <div
@@ -138,7 +140,7 @@
         <div class="headsite">
           <div class="d-none   d-md-flex head1"></div>
  
-            <div class="titleb  ">
+            <div class="titleb header-brand-desktop">
               <router-link  to="/" >
                 <div>
                   <div class="d-none d-sm-flex ludmila"></div>
@@ -166,7 +168,7 @@
               
             </div>
  
-            <div class="titles d-flex d-sm-none"> 
+            <div class="titles header-brand-mobile d-flex d-sm-none"> 
               <div class="ludmila  "></div>
               <div class="nagovets  nags"></div>
               <div class="bgdfa   "> </div>
@@ -416,30 +418,30 @@ onMounted(() => {
 .whatsapp{
   border-radius: 4px;
   background-image: url('../../images/whatsapp.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .viber{
   border-radius: 4px;
   background-image: url('../../images/viber.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .skype{
   border-radius: 4px;
   background-image: url('../../images/skype.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .telg{
   border-radius: 4px;
   background-image: url('../../images/tg.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .appbar{
   position: relative;
@@ -717,15 +719,62 @@ margin-top: 14px;
 
 .desktop-menu {
   display: flex;
+  margin-right: 8px;
 }
 
-@media (max-width: 599px) {
+.appbar-inner {
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+.titles .subti {
+  color: #1f2833;
+}
+
+.titles .subti .subti-phone-link {
+  color: #1f2833 !important;
+}
+
+@media (max-width: 850px) {
   .menu-toggle {
     display: flex !important;
     align-items: center;
   }
 
   .desktop-menu {
+    display: none !important;
+  }
+
+  .header-brand-desktop {
+    display: none !important;
+  }
+
+  .header-brand-mobile {
+    display: flex !important;
+  }
+
+  .mobile-nav-drawer.v-navigation-drawer {
+    top: 0 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
+  .mobile-nav-drawer .v-navigation-drawer__content {
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 10px 10px 10px;
+    scrollbar-gutter: stable;
+  }
+
+  .mobile-nav-list {
+    padding-right: 8px;
+  }
+}
+
+@media (min-width: 851px) {
+  .header-brand-desktop {
+    display: block !important;
+  }
+
+  .header-brand-mobile {
     display: none !important;
   }
 }
