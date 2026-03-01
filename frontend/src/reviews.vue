@@ -13,7 +13,7 @@
                   <div class="d-flex justify-end subtitle-2">{{ item.name }}</div>
                 </div>
 
-    <div v-if="isAdmin">
+    <div v-admin="isAdmin">
                 <div class="my-2">
                     <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
@@ -89,7 +89,7 @@
           </div>
         </v-container>
    
-    <div v-if="isAdmin">
+    <div v-admin="isAdmin">
       <v-card 
         class="ma-2 pa-2"
         max-width="874">
@@ -138,13 +138,13 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, onMounted, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useLogStore } from "store.js"
+import { getCurrentInstance, onMounted, ref } from "vue"
+import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 
-const logStore = useLogStore()
-const { currentUser } = storeToRefs(logStore)
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const abody = ref("")
 const aname = ref("")
@@ -155,12 +155,11 @@ const ebody = ref("")
 const closeOnContentClick = ref(false)
 const reviews = ref([])
 
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 
 const loadReviews = async () => {
   try {
-    const response = await proxy.$http.plain.get("/reviews")
-    reviews.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/reviews"))
+    reviews.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }

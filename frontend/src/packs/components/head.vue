@@ -1,7 +1,7 @@
    <template>  
     <div>
       <v-app-bar dense fixed flat hide-on-scroll rounded color="transparent" class="appbar">
-        <v-container class= "px-0 ">
+        <v-container class= "appbar-inner px-1 ">
           <div class="d-flex d-sm-flex " > 
             <v-hover>
               <template v-slot:default="{ isHovering, props }">
@@ -20,7 +20,7 @@
               </template>
             </v-hover>
             <v-spacer></v-spacer>
-            <div class="d-flex align-center">
+            <div class="d-flex align-center px-1">
               <!-- {{this.signedIn}} -->
               <!-- <div v-if="this.signedIn == true" > -->
               <profile class="d-flex align-center"></profile>
@@ -91,12 +91,14 @@
                     <div class="mb-1 " style="text-align: center;">
                       Встречи проводятся очно или онлайн через мессенджеры:
                     </div>
-                    <div class="d-flex flex-row justify-center">
-                      <a href="https://web.telegram.org/"  target="_blank"><div class="telg mr-2"></div></a>
-                      <a href="https://skype.com/"  target="_blank"><div class="skype mr-2"></div></a>
-                      <a href="https://www.whatsapp.com/"  target="_blank"><div class="whatsapp mr-2"></div></a>
-                      <a href="https://www.viber.com//"  target="_blank"><div class="viber mr-2"></div></a>
-                    </div>              
+                        <div class="d-flex flex-row justify-center">
+
+   
+                      <a href="https://t.me/nagovets/"  target="_blank"><div class="telg mr-2"></div></a>
+                      <a href="https://max.ru/u/f9LHodD0cOJ2BZkoy-hsKrzIqQeCi_sbA9pzKMXtX2mKOjB7UPEiSG1EvZ0"  target="_blank"><div class="skype mr-2"></div></a>
+                      <a href="https://wa.me/79193814826/"  target="_blank"><div class="whatsapp mr-2"></div></a>
+                        </div>
+                                
                   </div>
  
                   <div class="d-flex justify-end">
@@ -109,8 +111,6 @@
                     </v-btn>  
                   </div>
                 </v-form>
-                <v-card-actions>
-                </v-card-actions>
               </v-card>
             </v-dialog>
           </div>
@@ -118,9 +118,11 @@
       </v-app-bar> 
       <v-navigation-drawer
         v-model="drawer" 
+        class="mobile-nav-drawer"
         fixed
         temporary>
         <v-list
+          class="mobile-nav-list"
           nav
           dense>
           <div
@@ -138,7 +140,7 @@
         <div class="headsite">
           <div class="d-none   d-md-flex head1"></div>
  
-            <div class="titleb  ">
+            <div class="titleb header-brand-desktop">
               <router-link  to="/" >
                 <div>
                   <div class="d-none d-sm-flex ludmila"></div>
@@ -166,13 +168,13 @@
               
             </div>
  
-            <div class="titles d-flex d-sm-none"> 
+            <div class="titles header-brand-mobile d-flex d-sm-none"> 
               <div class="ludmila  "></div>
               <div class="nagovets  nags"></div>
               <div class="bgdfa   "> </div>
               <div class="bgdfb  "> </div>
               <div class=" subti flex-row  "> психолог–психоаналитик<br><div class="pb-1 subti-phone" style="text-align: center;">
-                  <a class="subti-phone-link" href="tel:+79193814826" >тел. +7(919) 381 4826</a>
+                  <a class="subti-phone-link" :href="'tel:'+ tel" >тел. {{tel}}</a>
               </div> 
             </div>
 
@@ -183,7 +185,7 @@
  
             </div>
           </div>  
-                  <div class="posred" v-if="isAdmin">
+                  <div class="posred" v-admin="isAdmin">
                     <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                       <template v-slot:activator="{ props }">
@@ -222,22 +224,26 @@
                           </v-form>
                         </v-card>                    
                       </v-menu>
-                    </div>      
+                    </div>
         </v-container>
       </div>
     </template>
 <script setup>
-import { computed, getCurrentInstance, nextTick, onMounted, ref } from "vue"
+import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useLogStore } from "store.js"
+import { useAdmin } from "../../composables/useAdmin"
+import { useRequestRetry } from "../../composables/useRequestRetry"
 import Profile from "../../packs/components/Profile.vue"
 import gsap from "gsap"
 import { mdiMenu } from "@mdi/js"
 
 const router = useRouter()
 const logStore = useLogStore()
-const { currentUser, signedIn } = storeToRefs(logStore)
+const { signedIn } = storeToRefs(logStore)
+const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 const { proxy } = getCurrentInstance()
 
 const closeOnContentClick = ref(false)
@@ -265,11 +271,9 @@ const nameRules = [
   (v) => (v && v.length <= 45) || "Вы превысили лимит 45 знаков",
 ]
 
-const isAdmin = computed(() => currentUser.value?.role === "admin")
-
 const gettel = async () => {
   try {
-    const response = await proxy.$http.plain.get("/contacts")
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/contacts"))
     tel.value = response?.data?.[0]?.tel || tel.value
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
@@ -416,30 +420,30 @@ onMounted(() => {
 .whatsapp{
   border-radius: 4px;
   background-image: url('../../images/whatsapp.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .viber{
   border-radius: 4px;
   background-image: url('../../images/viber.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .skype{
   border-radius: 4px;
   background-image: url('../../images/skype.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .telg{
   border-radius: 4px;
   background-image: url('../../images/tg.png');
-  background-size: 32px;
-  height: 32px;
-  width: 32px;
+  background-size: 52px;
+  height: 52px;
+  width: 52px;
 }
 .appbar{
   position: relative;
@@ -545,55 +549,73 @@ margin-top: 14px;
   font-weight: 500;
   letter-spacing: 0.3px;
   line-height: 1.2;
-  padding: 5px 8px;
+  padding: 4px 8px;
   z-index: 1;
 }
 .titleb .subti{
-  width: 430px;
+  width: auto;
+    display: inline-flex;
     margin-top: 2px;
     margin-left: 50px;
-    text-shadow: rgba(255, 255, 255, 0.28) 0 1px 1px;
-  background-color: rgba(96, 102, 110, 0.22);
-  color: #1f2224;
+    text-shadow: rgba(255, 255, 255, 0.25) 0 1px 1px;
+  background-color: rgba(86, 91, 99, 0.16);
+  color: #1b1d1f;
   font-size: 16px;
   position: absolute;
+  white-space: nowrap;
 }
 .titles .subti{
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   margin-top: 72px;
   margin-left: 33px;
-  text-shadow: rgba(255, 255, 255, 0.25) 0 1px 1px;
-  background-color: rgba(96, 102, 110, 0.22);
-  color: #f7f7f7;
-  font-size: 14px;
+  text-shadow: rgba(0, 0, 0, 0.14) 0 1px 1px;
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 13px;
+  font-family: "Roboto Slab";
+  font-weight: 500;
+  letter-spacing: 0.22px;
   max-width: 320px;
   position: absolute;
 }
 .subti-phone {
-  margin-left: 14px;
+  margin-left: 10px;
 }
 .subti-phone-link {
   color: #1f2224 !important;
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.1px;
 }
 
 .titles .subti .subti-phone-link {
-  color: #f4f4f4 !important;
+  color: #ffffff !important;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 @media (max-width: 599px) {
   .titles .subti {
     margin-left: 22px;
-    margin-top: 70px;
-    padding: 7px 9px;
-    font-size: 14px;
+    margin-top: 68px;
+    padding: 6px 10px;
+    font-size: 12px;
+    max-width: 342px;
+    background-color: rgba(233, 241, 251, 0.18);
+    border-color: rgba(255, 255, 255, 0.36);
+    text-shadow: rgba(0, 0, 0, 0.18) 0 1px 1px;
   }
   .titles .subti a {
-    font-size: 14px;
+    font-size: 12px;
+  }
+  .titleb .subti {
+    margin-left: 44px;
+    font-size: 15px;
+  }
+  .subti-phone {
+    margin-left: 8px;
   }
 }
 .titleb .nagovets{
@@ -657,13 +679,15 @@ margin-top: 14px;
 }
 .head1{
   /*float: left;*/
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   height: 215px;
   width: 201px;
   background-image: url('../../images/head1.jpg');
 }
 .head2{
+    z-index: 1;
+    position: relative;
   /*position: absolute;*/
   height: 215px;
 }
@@ -697,15 +721,62 @@ margin-top: 14px;
 
 .desktop-menu {
   display: flex;
+  margin-right: 8px;
 }
 
-@media (max-width: 599px) {
+.appbar-inner {
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+.titles .subti {
+  color: #1f2833;
+}
+
+.titles .subti .subti-phone-link {
+  color: #1f2833 !important;
+}
+
+@media (max-width: 850px) {
   .menu-toggle {
     display: flex !important;
     align-items: center;
   }
 
   .desktop-menu {
+    display: none !important;
+  }
+
+  .header-brand-desktop {
+    display: none !important;
+  }
+
+  .header-brand-mobile {
+    display: flex !important;
+  }
+
+  .mobile-nav-drawer.v-navigation-drawer {
+    top: 0 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
+  .mobile-nav-drawer .v-navigation-drawer__content {
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 10px 10px 10px;
+    scrollbar-gutter: stable;
+  }
+
+  .mobile-nav-list {
+    padding-right: 8px;
+  }
+}
+
+@media (min-width: 851px) {
+  .header-brand-desktop {
+    display: block !important;
+  }
+
+  .header-brand-mobile {
     display: none !important;
   }
 }

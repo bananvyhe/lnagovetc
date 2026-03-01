@@ -9,7 +9,7 @@
                 <h4>Консультирую:</h4>
                   <div class="body-1 my-2 mb-1">
                     <span v-html="contacts[0]?.desc || ''"></span>
-                    <div class="desc " v-if="isAdmin">
+                    <div class="desc" v-admin="isAdmin">
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -53,7 +53,7 @@
                   </div> 
                   <div class="body-1 mt-0 mb-3">
                     <span v-html="contacts[1]?.desc || ''"></span>
-                    <div class="desc" v-if="isAdmin">
+                    <div class="desc" v-admin="isAdmin">
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -97,7 +97,7 @@
                   </div> 
                   <div class="body-1 mt-0 mb-3">
                       <span v-html="contacts[2]?.desc || ''"></span>
-                    <div class="desc" v-if="isAdmin">
+                    <div class="desc" v-admin="isAdmin">
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -160,7 +160,7 @@
             <div class="address-map-popover" v-html="mapEmbedHtml"></div>
           </div>
 <v-container > 
-                    <div class=" " v-if="isAdmin">редактор карты:
+                    <div class=" " v-admin="isAdmin">редактор карты:
                       <v-menu offset-y
                       :close-on-content-click="closeOnContentClick">
                         <template v-slot:activator="{ props }">
@@ -224,12 +224,12 @@
 
 <script setup>
 import { computed, getCurrentInstance, onMounted, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useLogStore } from "store.js"
+import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 
-const logStore = useLogStore()
-const { currentUser } = storeToRefs(logStore)
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const closeOnContentClick = ref(false)
 const contacts = ref([
@@ -239,11 +239,9 @@ const contacts = ref([
 ])
 const econt = ref("")
 
-const isAdmin = computed(() => currentUser.value?.role === "admin")
-
 const getcont = async (dat) => {
   try {
-    const response = await proxy.$http.plain.get("/contacts")
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/contacts"))
     contacts.value = Array.isArray(response.data) ? response.data : []
 
     if (dat === undefined || dat === null) {
@@ -322,6 +320,8 @@ onMounted(() => {
   position: relative;
   text-align: center;
   width: 100%;
+  padding-bottom: 10px;
+  overflow: visible;
  }
 
  .address-trigger {
@@ -335,27 +335,37 @@ onMounted(() => {
  .address-map-popover {
   background: #fff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-  left: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: calc(100vw - 32px);
   opacity: 0;
   pointer-events: none;
   position: absolute;
-  top: 28px;
-  transform: translate(-50%, -4px);
+  top: calc(100% - 6px);
+  transform: translateY(-4px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   width: min(100%, 740px);
+  overflow: hidden;
   z-index: 20;
  }
 
- .address-map-wrap:hover .address-map-popover {
+ .address-map-wrap:hover .address-map-popover,
+ .address-map-wrap:focus-within .address-map-popover {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
  }
 
  .address-map-popover iframe {
   border: 0;
   display: block;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100%;
+ }
+
+ .address-map-popover a {
+  display: none !important;
  }
 
  @media (max-width: 800px) {
@@ -364,7 +374,8 @@ onMounted(() => {
     opacity: 1;
     pointer-events: auto;
     transform: none;
-    width: 100%;
+    width: min(100%, 740px);
+    max-width: 100%;
   }
  }
 </style>

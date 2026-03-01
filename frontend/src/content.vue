@@ -11,15 +11,24 @@
                 <div  id='about_block' class="aboutTitle " v-bind:class="{ ikses: isCompactLayout }" > 
                   <h2 >Обо мне </h2>
                 </div>
-                <div class="foto"></div>
-                <span  >
+                <img
+                  class="foto"
+                  :src="fotoSrc"
+                  alt="Людмила Наговец, психолог-психоаналитик"
+                  width="227"
+                  height="275"
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                />
+                <span style >
                 {{about}}
                 </span> 
               </div>
             </div>              
           </div>
 
-          <div class="posred" v-if="isAdmin">
+          <div class="posred" v-admin="isAdmin">
             <v-menu offset-y
               :close-on-content-click="closeOnContentClick">
               <template v-slot:activator="{ props }">
@@ -59,13 +68,13 @@
                 </v-form>
               </v-card>                    
             </v-menu>
-          </div> 
+          </div>
 
           <div class="konsultBlock mb-3 mt-2 px-2">
             <h2>Как проходит консультация?</h2>
             <span >{{consult}}</span>
 
-            <div class="posred" v-if="isAdmin">
+            <div class="posred" v-admin="isAdmin">
               <v-menu offset-y
                 :close-on-content-click="closeOnContentClick">
                 <template v-slot:activator="{ props }">
@@ -105,7 +114,7 @@
                   </v-form>
                 </v-card>                    
               </v-menu>
-            </div> 
+            </div>
 
             </div>
             <div class="zaprosBlock ">
@@ -123,7 +132,7 @@
                   :key="item.name"> 
                   <li>
                     {{item.position}}
-<div v-if="isAdmin"  class="pt-2">
+<div class="pt-2" v-admin="isAdmin">
                     <v-btn
                     class="mx-2"
                     x-small
@@ -143,11 +152,11 @@
                     @click="delitem(item.id)">
                       удал
                     </v-btn>
-</div>                    
+</div>
                   </li>
                 </ul>
 
-                <div v-if="isAdmin"  class="pt-2">
+                <div class="pt-2" v-admin="isAdmin">
                   <h3>Добавить:</h3>
 
                   <v-form>
@@ -171,11 +180,11 @@
                       </v-btn>
                       </div>
                     </v-container>
-                  </v-form>    
-                </div>
+	                  </v-form>    
+	                </div>
 
-              </div>
-            </v-container>
+	              </div>
+	            </v-container>
           </div>
         </v-col>
             
@@ -186,21 +195,21 @@
                 <h2>Образование</h2>  
               </div>
 
-              <div v-for="(item, index) in filteredListtrue" > 
-                <div class="py-1 px-4">
-                  {{index+1+"."}}   {{item.desc}}
-                </div>
-              </div>  
+	              <div v-for="(item, index) in filteredListtrue"  > 
+	                <div class="py-1 px-4">
+	                  {{index+1+"."}}   {{item.desc}}
+	                </div>
+	              </div>  
 
               <div>
                Прошла дополнительное обучение по профессиональным программам: 
               </div>
-              <div v-for="(item, index) in filteredListfalse" > 
+              <div v-for="(item, index) in filteredListfalse" class=" pl-6"> 
                 <ul>
                   <li>
                     {{item.desc}}
 
-<div v-if="isAdmin"  class="pt-2">
+<div class="pt-2" v-admin="isAdmin">
                     <v-btn
                     class="mx-2"
                     x-small
@@ -228,7 +237,7 @@
                 </ul>
               </div> 
 
-                <div v-if="isAdmin"  class="pt-2">
+                <div class="pt-2" v-admin="isAdmin">
                   <h3>Добавить:</h3>
 
                   <v-form>
@@ -266,13 +275,14 @@
 
 <script setup>
 import { computed, getCurrentInstance, onMounted, ref } from "vue"
-import { storeToRefs } from "pinia"
-import { useLogStore } from "store.js"
+import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 import gsap from "gsap"
+import fotoSrc from "./images/foto10.png"
 
-const logStore = useLogStore()
-const { currentUser } = storeToRefs(logStore)
 const { proxy } = getCurrentInstance()
+const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const hiddened = ref(true)
 const delitemided = ref("")
@@ -286,7 +296,6 @@ const closeOnContentClick = ref(false)
 const consult = ref("")
 const about = ref("")
 
-const isAdmin = computed(() => currentUser.value?.role === "admin")
 const isCompactLayout = computed(() => {
   const vuetifyObj = proxy?.$vuetify || {}
   const display = vuetifyObj.display || {}
@@ -303,8 +312,8 @@ const hidhandleed = (dat) => {
 
 const geted = async () => {
   try {
-    const response = await proxy.$http.plain.get("/educations")
-    ed.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/educations"))
+    ed.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }
@@ -340,8 +349,8 @@ const hidhandle = (dat) => {
 
 const getreq = async () => {
   try {
-    const response = await proxy.$http.plain.get("/requests")
-    req.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/requests"))
+    req.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }
@@ -368,9 +377,10 @@ const aitem = async () => {
 
 const getred = async () => {
   try {
-    const response = await proxy.$http.plain.get("/redactors")
-    about.value = response.data.about
-    consult.value = response.data.consult
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/redactors"))
+    const payload = response?.data || {}
+    about.value = payload.about || ""
+    consult.value = payload.consult || ""
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }
@@ -519,14 +529,7 @@ ul.list6b{
   /*align-self: center;*/
 }
 
-.ikses{ 
-
-  white-space: nowrap;
-  color: #fff !important;
-   /*backdrop-filter: blur(2px);*/
-   background-color: rgb(179.688, 171.652, 147.813, .3);
-  /*text-shadow: 1px 1px 2px #ffffff;*/
-}
+ 
 
 .fotoframe{
  
@@ -582,6 +585,14 @@ ul.list6b{
   background-repeat: repeat-x;
   border-radius: 25px 10px;
 }
+.ikses {
+    white-space: nowrap;
+    color: #fff !important;
+    background-color: rgb(179.688, 171.652, 147.813, .3);
+}
+.ikses h2{
+ text-shadow: 1px 1px rgb(0, 0, 0, .6);
+  }
 .foto{
 
   position: relative;
@@ -591,11 +602,12 @@ ul.list6b{
   /*position: absolute;*/
   z-index: 4;
   float: right;
-  margin-top: -79px;
- 
-  width: 247px;
-  height: 290px;
-  background-image: url('./images/foto10.png');
+  margin-top: -65px;
+  margin-left: -50px;
+  width: 227px;
+  height: 275px;
+  object-fit: cover;
+  object-position: center;
   /*background-color: #dad;*/
 }
 .about{ 
