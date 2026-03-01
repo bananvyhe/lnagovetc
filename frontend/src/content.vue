@@ -11,7 +11,16 @@
                 <div  id='about_block' class="aboutTitle " v-bind:class="{ ikses: isCompactLayout }" > 
                   <h2 >Обо мне </h2>
                 </div>
-                <div class="foto"></div>
+                <img
+                  class="foto"
+                  :src="fotoSrc"
+                  alt="Людмила Наговец, психолог-психоаналитик"
+                  width="227"
+                  height="275"
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                />
                 <span style >
                 {{about}}
                 </span> 
@@ -269,6 +278,7 @@ import { computed, getCurrentInstance, onMounted, ref } from "vue"
 import { useAdmin } from "./composables/useAdmin"
 import { useRequestRetry } from "./composables/useRequestRetry"
 import gsap from "gsap"
+import fotoSrc from "./images/foto10.png"
 
 const { proxy } = getCurrentInstance()
 const { isAdmin } = useAdmin()
@@ -596,7 +606,8 @@ ul.list6b{
   margin-left: -50px;
   width: 227px;
   height: 275px;
-  background-image: url('./images/foto10.png');
+  object-fit: cover;
+  object-position: center;
   /*background-color: #dad;*/
 }
 .about{ 
