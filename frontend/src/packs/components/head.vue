@@ -234,6 +234,7 @@ import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useLogStore } from "store.js"
 import { useAdmin } from "../../composables/useAdmin"
+import { useRequestRetry } from "../../composables/useRequestRetry"
 import Profile from "../../packs/components/Profile.vue"
 import gsap from "gsap"
 import { mdiMenu } from "@mdi/js"
@@ -242,6 +243,7 @@ const router = useRouter()
 const logStore = useLogStore()
 const { signedIn } = storeToRefs(logStore)
 const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 const { proxy } = getCurrentInstance()
 
 const closeOnContentClick = ref(false)
@@ -271,7 +273,7 @@ const nameRules = [
 
 const gettel = async () => {
   try {
-    const response = await proxy.$http.plain.get("/contacts")
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/contacts"))
     tel.value = response?.data?.[0]?.tel || tel.value
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")

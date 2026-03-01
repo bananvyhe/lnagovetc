@@ -140,9 +140,11 @@
 <script setup>
 import { getCurrentInstance, onMounted, ref } from "vue"
 import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 
 const { proxy } = getCurrentInstance()
 const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const abody = ref("")
 const aname = ref("")
@@ -156,8 +158,8 @@ const reviews = ref([])
 
 const loadReviews = async () => {
   try {
-    const response = await proxy.$http.plain.get("/reviews")
-    reviews.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/reviews"))
+    reviews.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }

@@ -192,9 +192,11 @@
 <script setup>
 import { getCurrentInstance, onMounted, ref } from "vue"
 import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 
 const { proxy } = getCurrentInstance()
 const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const delitemid = ref("")
 const hidden = ref(true)
@@ -209,8 +211,8 @@ const prices = ref([])
 
 const loadPrices = async () => {
   try {
-    const response = await proxy.$http.plain.get("/prices")
-    prices.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/prices"))
+    prices.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }

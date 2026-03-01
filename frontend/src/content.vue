@@ -267,10 +267,12 @@
 <script setup>
 import { computed, getCurrentInstance, onMounted, ref } from "vue"
 import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 import gsap from "gsap"
 
 const { proxy } = getCurrentInstance()
 const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const hiddened = ref(true)
 const delitemided = ref("")
@@ -300,8 +302,8 @@ const hidhandleed = (dat) => {
 
 const geted = async () => {
   try {
-    const response = await proxy.$http.plain.get("/educations")
-    ed.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/educations"))
+    ed.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }
@@ -337,8 +339,8 @@ const hidhandle = (dat) => {
 
 const getreq = async () => {
   try {
-    const response = await proxy.$http.plain.get("/requests")
-    req.value = response.data
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/requests"))
+    req.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }
@@ -365,9 +367,10 @@ const aitem = async () => {
 
 const getred = async () => {
   try {
-    const response = await proxy.$http.plain.get("/redactors")
-    about.value = response.data.about
-    consult.value = response.data.consult
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/redactors"))
+    const payload = response?.data || {}
+    about.value = payload.about || ""
+    consult.value = payload.consult || ""
   } catch (error) {
     proxy.setError?.(error, "Something went wrong")
   }

@@ -225,9 +225,11 @@
 <script setup>
 import { computed, getCurrentInstance, onMounted, ref } from "vue"
 import { useAdmin } from "./composables/useAdmin"
+import { useRequestRetry } from "./composables/useRequestRetry"
 
 const { proxy } = getCurrentInstance()
 const { isAdmin } = useAdmin()
+const { requestWithRetry } = useRequestRetry()
 
 const closeOnContentClick = ref(false)
 const contacts = ref([
@@ -239,7 +241,7 @@ const econt = ref("")
 
 const getcont = async (dat) => {
   try {
-    const response = await proxy.$http.plain.get("/contacts")
+    const response = await requestWithRetry(() => proxy.$http.plain.get("/contacts"))
     contacts.value = Array.isArray(response.data) ? response.data : []
 
     if (dat === undefined || dat === null) {
