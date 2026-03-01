@@ -195,7 +195,7 @@
                 <h2>Образование</h2>  
               </div>
 
-	              <div v-for="(item, index) in filteredListtrue" > 
+	              <div v-for="(item, index) in filteredListtrue"  > 
 	                <div class="py-1 px-4">
 	                  {{index+1+"."}}   {{item.desc}}
 	                </div>
@@ -204,7 +204,7 @@
               <div>
                Прошла дополнительное обучение по профессиональным программам: 
               </div>
-              <div v-for="(item, index) in filteredListfalse" > 
+              <div v-for="(item, index) in filteredListfalse" class=" pl-6"> 
                 <ul>
                   <li>
                     {{item.desc}}
