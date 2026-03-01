@@ -4,8 +4,8 @@
           <div class="headpsy aboutTitle d-flex justify-center pb-1 ">
             <h2>Стоимость</h2>
           </div>
-        <v-simple-table dense>
-          <template >
+        <v-table density="compact">
+          <template #default>
             <thead>
               <tr>
                 <th class="text-left priceHead">
@@ -127,7 +127,7 @@
  
             </tbody>
           </template>
-        </v-simple-table>
+        </v-table>
         <div v-admin="isAdmin">
           <h3>Добавить услугу:</h3>
 

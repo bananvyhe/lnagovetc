@@ -5,7 +5,7 @@
           <div class="d-flex d-sm-flex " > 
             <v-hover>
               <template v-slot:default="{ isHovering, props }">
-                <div class="menu-toggle" >
+                <div class="menu-toggle" v-if="!drawer">
                   <v-btn v-bind="props" @click="drawer = true"
                     size="small"
                     variant="flat"
