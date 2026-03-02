@@ -29,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/bananvyhe/codex_local_env_setup
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest
             type=sha
