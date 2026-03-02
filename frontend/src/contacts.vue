@@ -156,8 +156,8 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content> -->
           <div class="address-map-wrap" v-if="addressText && mapEmbedHtml">
-            <span class="address-trigger">{{ addressText }}</span>
-            <div class="address-map-popover" v-html="mapEmbedHtml"></div>
+            <div class="address-trigger">{{ addressText }}</div>
+            <div class="address-map-embed" v-html="mapEmbedHtml"></div>
           </div>
 <v-container > 
                     <div class=" " v-admin="isAdmin">редактор карты:
@@ -316,64 +316,44 @@ onMounted(() => {
  }
 
  .address-map-wrap {
-  margin: 12px 0 8px;
-  position: relative;
+  margin: 12px 0 16px;
   text-align: center;
   width: 100%;
-  padding-bottom: 10px;
-  overflow: visible;
+  padding-bottom: 0;
  }
 
  .address-trigger {
-  border-bottom: 1px dashed #555;
   color: #1a1a1a;
-  cursor: pointer;
-  display: inline-block;
+  display: block;
   font-weight: 500;
+  margin-bottom: 10px;
  }
 
- .address-map-popover {
+ .address-map-embed {
   background: #fff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-  left: 0;
-  right: 0;
   margin: 0 auto;
   max-width: calc(100vw - 32px);
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  top: calc(100% - 6px);
-  transform: translateY(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  position: relative;
   width: min(100%, 740px);
   overflow: hidden;
+  border-radius: 4px;
   z-index: 20;
  }
 
- .address-map-wrap:hover .address-map-popover,
- .address-map-wrap:focus-within .address-map-popover {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
- }
-
- .address-map-popover iframe {
+ .address-map-embed iframe {
   border: 0;
   display: block;
   width: 100% !important;
   max-width: 100%;
  }
 
- .address-map-popover a {
+ .address-map-embed a {
   display: none !important;
  }
 
  @media (max-width: 800px) {
-  .address-map-popover {
-    position: static;
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
+  .address-map-embed {
     width: min(100%, 740px);
     max-width: 100%;
   }
