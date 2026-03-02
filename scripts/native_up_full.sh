@@ -8,6 +8,25 @@ cd "$ROOT_DIR"
 
 mkdir -p tmp/pids log
 
+pid_is_running() {
+  local pid="$1"
+  [[ -n "$pid" ]] && kill -0 "$pid" >/dev/null 2>&1
+}
+
+cleanup_stale_pid() {
+  local pid_file="$1"
+  if [[ -f "$pid_file" ]]; then
+    local pid
+    pid="$(cat "$pid_file" 2>/dev/null || true)"
+    if ! pid_is_running "$pid"; then
+      rm -f "$pid_file"
+    fi
+  fi
+}
+
+cleanup_stale_pid "tmp/pids/sidekiq.pid"
+cleanup_stale_pid "tmp/pids/vite.pid"
+
 if [[ ! -f tmp/pids/sidekiq.pid ]]; then
   sidekiq_cmd="ruby -S bundle exec sidekiq"
   if command -v mise >/dev/null 2>&1; then

@@ -22,7 +22,24 @@ run() {
   fi
 }
 
+pid_is_running() {
+  local pid="$1"
+  [[ -n "$pid" ]] && kill -0 "$pid" >/dev/null 2>&1
+}
+
+cleanup_stale_pid() {
+  local pid_file="$1"
+  if [[ -f "$pid_file" ]]; then
+    local pid
+    pid="$(cat "$pid_file" 2>/dev/null || true)"
+    if ! pid_is_running "$pid"; then
+      rm -f "$pid_file"
+    fi
+  fi
+}
+
 mkdir -p tmp/pids log
+cleanup_stale_pid "tmp/pids/rails.pid"
 
 pg_ctl_bin="$(command -v pg_ctl || true)"
 if [[ -z "$pg_ctl_bin" ]] && [[ -x "$HOME/.local/share/mise/installs/postgres/latest/bin/pg_ctl" ]]; then
@@ -86,5 +103,19 @@ fi
 nohup env PATH="$PATH_PREFIX" bash -c "cd $ROOT_DIR/backend && $rails_cmd" > log/rails.log 2>&1 &
 
 echo $! > tmp/pids/rails.pid
+
+# Wait until Rails is reachable to avoid frontend opening against a dead backend.
+for _ in {1..30}; do
+  if curl -fsS --max-time 1 "http://localhost:3000/up" >/dev/null 2>&1; then
+    break
+  fi
+  sleep 1
+done
+
+if ! curl -fsS --max-time 1 "http://localhost:3000/up" >/dev/null 2>&1; then
+  echo "Rails failed to start on http://localhost:3000"
+  echo "See logs: $ROOT_DIR/log/rails.log"
+  exit 1
+fi
 
 echo "Rails running on http://localhost:3000"
