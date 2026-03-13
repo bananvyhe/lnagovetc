@@ -3,7 +3,7 @@
 ## Commands
 - `make bootstrap` - initialize backend/frontend and database
 - `make up` - run core profile (`web + postgres + redis`)
-- `make up-full` - run full profile (`core + vite + sidekiq`)
+- `make up-full` - run full profile (`core + vite`)
 - `make down` - stop everything
 - `make logs` - stream logs
 - `make hello` - smoke check for `http://localhost:3000`
@@ -11,7 +11,7 @@
 ## Native (no Docker)
 - `make bootstrap-native` - initialize local Ruby/Node and project files
 - `make up-native` - run Rails only
-- `make up-native-full` - run Rails + Vite + Sidekiq
+- `make up-native-full` - run Rails + Vite
 - `make down-native` - stop local processes started by the scripts
 - `make test-native` - run backend/frontend tests locally
 

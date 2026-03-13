@@ -14,6 +14,12 @@ import { securedAxiosInstance, plainAxiosInstance } from "./packs/backend/axios"
 import "./style.css"
 import "vue-datepicker-next/index.css"
 
+if (import.meta.env.DEV && window.location.hostname === "127.0.0.1") {
+  const url = new URL(window.location.href)
+  url.hostname = "localhost"
+  window.location.replace(url.toString())
+}
+
 const app = createApp(App)
 
 const pinia = createPinia()

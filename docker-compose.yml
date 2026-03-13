@@ -48,29 +48,6 @@ services:
         condition: service_started
     command: bash -lc "if [ ! -f Gemfile ]; then echo 'Run make bootstrap first'; sleep infinity; fi; bundle exec rails server -b 0.0.0.0 -p 3000"
 
-  sidekiq:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.web
-    profiles: ["full"]
-    working_dir: /app/backend
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-      REDIS_URL: ${REDIS_URL}
-      RAILS_ENV: ${RAILS_ENV}
-    volumes:
-      - ./backend:/app/backend
-      - ./frontend:/app/frontend
-      - bundle_cache:/usr/local/bundle
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_started
-    command: bash -lc "bundle exec sidekiq"
-
   vite:
     image: node:22
     profiles: ["full"]

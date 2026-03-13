@@ -22,7 +22,7 @@ run() {
 run rails _8.0.2_ new backend --database=postgresql --skip-javascript --skip-hotwire --skip-action-mailbox --skip-action-text --skip-system-test
 
 cd "$ROOT_DIR/backend"
-run bundle add sidekiq redis
+run bundle add redis solid_queue
 
 cat > "$ROOT_DIR/backend/config/database.yml" <<'YAML'
 default: &default
@@ -48,7 +48,7 @@ if ! grep -q "config.active_job.queue_adapter" "$ROOT_DIR/backend/config/environ
     /Rails.application.configure do/ { inblock=1 }
     {
       if (inblock && !added && $0 == "end") {
-        print "  config.active_job.queue_adapter = :sidekiq"
+        print "  config.active_job.queue_adapter = :solid_queue"
         added=1
       }
       print
@@ -56,16 +56,6 @@ if ! grep -q "config.active_job.queue_adapter" "$ROOT_DIR/backend/config/environ
   ' "$ROOT_DIR/backend/config/environments/development.rb" > "$ROOT_DIR/backend/config/environments/development.rb.tmp"
   mv "$ROOT_DIR/backend/config/environments/development.rb.tmp" "$ROOT_DIR/backend/config/environments/development.rb"
 fi
-
-cat > "$ROOT_DIR/backend/config/initializers/sidekiq.rb" <<'RUBY'
-Sidekiq.configure_server do |config|
-  config.redis = { url: ENV.fetch("REDIS_URL", "redis://localhost:6379/1") }
-end
-
-Sidekiq.configure_client do |config|
-  config.redis = { url: ENV.fetch("REDIS_URL", "redis://localhost:6379/1") }
-end
-RUBY
 
 mkdir -p "$ROOT_DIR/backend/app/controllers" "$ROOT_DIR/backend/app/views/home" "$ROOT_DIR/backend/app/jobs"
 

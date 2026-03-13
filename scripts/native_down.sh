@@ -6,7 +6,7 @@ cd "$ROOT_DIR"
 
 export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
 
-for name in rails sidekiq vite; do
+for name in rails vite; do
   pid_file="tmp/pids/${name}.pid"
   if [[ -f "$pid_file" ]]; then
     pid=$(cat "$pid_file" || true)

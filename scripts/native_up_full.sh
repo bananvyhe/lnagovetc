@@ -24,17 +24,7 @@ cleanup_stale_pid() {
   fi
 }
 
-cleanup_stale_pid "tmp/pids/sidekiq.pid"
 cleanup_stale_pid "tmp/pids/vite.pid"
-
-if [[ ! -f tmp/pids/sidekiq.pid ]]; then
-  sidekiq_cmd="ruby -S bundle exec sidekiq"
-  if command -v mise >/dev/null 2>&1; then
-    sidekiq_cmd="mise exec -- $sidekiq_cmd"
-  fi
-  nohup env PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH" bash -c "cd $ROOT_DIR/backend && $sidekiq_cmd" > log/sidekiq.log 2>&1 &
-  echo $! > tmp/pids/sidekiq.pid
-fi
 
 if [[ ! -f tmp/pids/vite.pid ]]; then
   if [[ ! -d "$ROOT_DIR/frontend/node_modules" ]]; then

@@ -11,7 +11,7 @@ fi
 
 docker compose --profile core run --rm web bash -lc "cd /app && rails _8.0.2_ new backend --database=postgresql --skip-javascript --skip-hotwire --skip-action-mailbox --skip-action-text --skip-system-test"
 
-docker compose --profile core run --rm web bash -lc "cd /app/backend && bundle add sidekiq redis"
+docker compose --profile core run --rm web bash -lc "cd /app/backend && bundle add redis solid_queue"
 
 cat > backend/config/database.yml <<'YAML'
 default: &default
@@ -37,7 +37,7 @@ if ! grep -q "config.active_job.queue_adapter" backend/config/environments/devel
     /Rails.application.configure do/ { inblock=1 }
     {
       if (inblock && !added && $0 == "end") {
-        print "  config.active_job.queue_adapter = :sidekiq"
+        print "  config.active_job.queue_adapter = :solid_queue"
         added=1
       }
       print
@@ -45,16 +45,6 @@ if ! grep -q "config.active_job.queue_adapter" backend/config/environments/devel
   ' backend/config/environments/development.rb > backend/config/environments/development.rb.tmp
   mv backend/config/environments/development.rb.tmp backend/config/environments/development.rb
 fi
-
-cat > backend/config/initializers/sidekiq.rb <<'RUBY'
-Sidekiq.configure_server do |config|
-  config.redis = { url: ENV.fetch("REDIS_URL", "redis://redis:6379/1") }
-end
-
-Sidekiq.configure_client do |config|
-  config.redis = { url: ENV.fetch("REDIS_URL", "redis://redis:6379/1") }
-end
-RUBY
 
 mkdir -p backend/app/controllers backend/app/views/home backend/app/jobs
 
