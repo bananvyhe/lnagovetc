@@ -97,9 +97,12 @@
                       <a href="https://t.me/nagovets/"  target="_blank"><div class="telg mr-2"></div></a>
                       <a href="https://max.ru/u/f9LHodD0cOJ2BZkoy-hsKrzIqQeCi_sbA9pzKMXtX2mKOjB7UPEiSG1EvZ0"  target="_blank"><div class="skype mr-2"></div></a>
                       <a href="https://wa.me/79193814826/"  target="_blank"><div class="whatsapp mr-2"></div></a>
+                      
                         </div>
-                                
-                  </div>
+                          <div class="  mt-4">
+                            <p class="mes"><a href="https://b17.ru" target="_blank">на сайте психологов №1 b17.ru</a> </p>      
+                          </div>
+                        </div>
  
                   <div class="d-flex justify-end">
                     <v-btn
