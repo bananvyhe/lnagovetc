@@ -100,7 +100,7 @@
                       
                         </div>
                           <div class="  mt-4">
-                            <p class="mes"><a href="https://b17.ru" target="_blank">на сайте психологов №1 b17.ru</a> </p>      
+                            <p class="mes"><a href="https://www.b17.ru/lnagovetz/" target="_blank">на сайте психологов №1 b17.ru</a> </p>      
                           </div>
                         </div>
  
