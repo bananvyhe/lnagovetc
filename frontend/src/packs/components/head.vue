@@ -82,10 +82,10 @@
                   <v-textarea
                     class="mt-3"
                     v-model="text"
-                    filled
-                    name="input-7-4"
                     label="Задайте вопрос"
-                    value="">
+                    variant="outlined"
+                    rows="3"
+                    auto-grow>
                   </v-textarea>
                   <div class="d-flex justify-center flex-column">
                     <div class="mb-1 " style="text-align: center;">

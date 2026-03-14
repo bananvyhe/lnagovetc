@@ -14,6 +14,11 @@ if [[ -f .env ]]; then
   set +a
 fi
 
+if [[ -z "${RAILS_MASTER_KEY:-}" ]] && [[ -f "$ROOT_DIR/backend/config/master.key" ]]; then
+  export RAILS_MASTER_KEY
+  RAILS_MASTER_KEY="$(tr -d '\n' < "$ROOT_DIR/backend/config/master.key")"
+fi
+
 run() {
   if command -v mise >/dev/null 2>&1; then
     mise exec -- "$@"
@@ -100,7 +105,11 @@ rails_cmd="ruby -S bundle exec ruby bin/rails server -b 0.0.0.0 -p 3000"
 if command -v mise >/dev/null 2>&1; then
   rails_cmd="mise exec -- $rails_cmd"
 fi
-nohup env PATH="$PATH_PREFIX" bash -c "cd $ROOT_DIR/backend && $rails_cmd" > log/rails.log 2>&1 &
+rails_env=()
+if [[ -f "$ROOT_DIR/backend/config/master.key" ]]; then
+  rails_env+=( "RAILS_MASTER_KEY=$(tr -d '\n' < "$ROOT_DIR/backend/config/master.key")" )
+fi
+nohup env PATH="$PATH_PREFIX" "${rails_env[@]}" bash -c "cd $ROOT_DIR/backend && $rails_cmd" > log/rails.log 2>&1 &
 
 echo $! > tmp/pids/rails.pid
 

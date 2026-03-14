@@ -7,35 +7,38 @@ class MeshandlController < ApplicationController
 	require 'uri'
 
 	def mesa
-		puts "123"
- 		token = Rails.application.credentials[:token]
- 		mass = []
- 		params.each_value do |value|
- 			
- 			if value == nil
-  			mass << "не заполнено"
-  		else
-  			mass << value.to_s
-  		end
- 
-		end
+ 		token = Rails.application.credentials.dig(:telegram, :bot_token) ||
+ 		         Rails.application.credentials[:token] ||
+             Rails.application.credentials[:farmspot_bot] ||
+             Rails.application.credentials[:farmspot_bo]
+ 		chat_id = Rails.application.credentials.dig(:telegram, :chat_id) ||
+ 		          Rails.application.credentials[:chat_id] ||
+              Rails.application.credentials[:char_id]
 
- 		mesa = 'имя: '+mass[0]+' тел: '+mass[1]+' сообщение: '+mass[2]+' дата: '+mass[3]+' время: '+mass[4]
- 
- 		mesa = 'https://api.telegram.org/bot'+token+'/sendMessage?chat_id=199874565&text='+mesa 
- 
-	 	paf = URI::Parser.new
-	 	paf = paf.escape(mesa)
-	 	puts paf
- 
+		return head :unprocessable_entity if token.blank? || chat_id.blank?
 
-		HTTParty.post(paf)
- 
+		data = message_params
+		message = [
+			"имя: #{data[:name].presence || 'не заполнено'}",
+			"тел: #{data[:phone].presence || 'не заполнено'}",
+			"сообщение: #{data[:text].presence || 'не заполнено'}",
+			"дата: #{data[:data].presence || 'не заполнено'}",
+			"время: #{data[:time].presence || 'не заполнено'}"
+		].join(' ')
+
+		response = HTTParty.post(
+			"https://api.telegram.org/bot#{token}/sendMessage",
+			body: { chat_id: chat_id, text: message }.to_json,
+			headers: { 'Content-Type' => 'application/json' }
+		)
+		return head :ok if response.success?
+
+		render json: { error: "Telegram request failed" }, status: :bad_gateway
 	end
 
   private
  
-  # def user_params
-  #   params.permit(:name,:mes, :phone, :text, :time, :data)
-  # end	
+  def message_params
+    params.permit(:name, :phone, :text, :time, :data)
+  end
 end

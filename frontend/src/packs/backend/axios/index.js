@@ -1,7 +1,9 @@
 import axios from "axios"
 import { useLogStore } from "store.js"
 import router from "../../router"
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000"
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? "/api" : "http://localhost:3000")
 // const API_URL = window.location.href 
 // const API_URL = 'http://localhost:3000'
 // export default axios.create({
