@@ -46,6 +46,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    ports:
+      - "127.0.0.1:3001:3000"
     command: ["/bin/bash", "-lc", "./bin/rails db:prepare && bundle exec puma -C config/puma.rb"]
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:3000/up || exit 1"]
