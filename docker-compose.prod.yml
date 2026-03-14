@@ -38,7 +38,7 @@ services:
     environment:
       RAILS_ENV: production
       PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-lnagovetc}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-lnagovetc_production}
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
       RAILS_LOG_TO_STDOUT: "1"
     depends_on:

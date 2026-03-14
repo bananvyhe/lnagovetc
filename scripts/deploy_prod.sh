@@ -15,4 +15,10 @@ rsync -az --delete \
   --exclude .env.production \
   "$ROOT_DIR/" "${REMOTE_HOST}:${REMOTE_DIR}/"
 
-ssh "${REMOTE_HOST}" bash -lc "cd ${REMOTE_DIR} && docker compose -f docker-compose.prod.yml up -d --build"
+ssh "${REMOTE_HOST}" bash -lc "set -euo pipefail; test -d '${REMOTE_DIR}'; test -f '${REMOTE_DIR}/docker-compose.prod.yml'; test -f '${REMOTE_DIR}/.env.production'; \
+  if ! grep -q '^DATABASE_URL=' '${REMOTE_DIR}/.env.production'; then \
+    set -a; source '${REMOTE_DIR}/.env.production'; set +a; \
+    echo \"DATABASE_URL=postgresql://\${POSTGRES_USER}:\${POSTGRES_PASSWORD}@postgres:5432/\${POSTGRES_DB}\" >> '${REMOTE_DIR}/.env.production'; \
+    chmod 600 '${REMOTE_DIR}/.env.production'; \
+  fi; \
+  cd '${REMOTE_DIR}'; docker compose --env-file '${REMOTE_DIR}/.env.production' -f '${REMOTE_DIR}/docker-compose.prod.yml' up -d --build"
