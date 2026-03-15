@@ -397,9 +397,9 @@ const reditem = async () => {
 
 onMounted(async () => {
   await Promise.all([getred(), getreq(), geted()])
-  gsap.set(".foto", { opacity: 0 })
+  gsap.set(".foto", { autoAlpha: 0 })
   gsap.timeline().to(".foto", {
-    opacity: 1,
+    autoAlpha: 1,
     duration: 1.9,
     delay: 0.8,
     ease: "expo.out",
@@ -608,6 +608,8 @@ ul.list6b{
   height: 275px;
   object-fit: cover;
   object-position: center;
+  opacity: 0;
+  visibility: hidden;
   /*background-color: #dad;*/
 }
 .about{ 
