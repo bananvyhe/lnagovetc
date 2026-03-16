@@ -19,7 +19,50 @@ if (import.meta.env.DEV && window.location.hostname === "127.0.0.1") {
   url.hostname = "localhost"
   window.location.replace(url.toString())
 }
+if (import.meta.env.PROD) {
+  // Inject analytics only in production
+  const ymScript = document.createElement("script")
+  ymScript.type = "text/javascript"
+  ymScript.text = `
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
+ym(92708365, "init", {
+      clickmap:true,
+      trackLinks:true,
+      accurateTrackBounce:true
+});
+  `.trim()
+  document.head.appendChild(ymScript)
+
+  const ymNoScript = document.createElement("noscript")
+  const ymNoScriptDiv = document.createElement("div")
+  const ymNoScriptImg = document.createElement("img")
+  ymNoScriptImg.src = "https://mc.yandex.ru/watch/92708365"
+  ymNoScriptImg.alt = ""
+  ymNoScriptImg.style.position = "absolute"
+  ymNoScriptImg.style.left = "-9999px"
+  ymNoScriptDiv.appendChild(ymNoScriptImg)
+  ymNoScript.appendChild(ymNoScriptDiv)
+  document.body.appendChild(ymNoScript)
+
+  const gtagSrc = document.createElement("script")
+  gtagSrc.async = true
+  gtagSrc.src = "https://www.googletagmanager.com/gtag/js?id=G-83N45L5RYQ"
+  document.head.appendChild(gtagSrc)
+
+  const gtagInit = document.createElement("script")
+  gtagInit.text = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-83N45L5RYQ');
+  `.trim()
+  document.head.appendChild(gtagInit)
+}
 const app = createApp(App)
 
 const pinia = createPinia()
