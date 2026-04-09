@@ -6,6 +6,11 @@
 
 # Ruby / Rails
 /backend/log/*
+!/backend/log/.keep
+!/backend/log/web/.keep
+!/backend/log/postgres/.keep
+!/backend/log/redis/.keep
+!/backend/log/frontend/.keep
 /backend/tmp/*
 /backend/storage/*
 /backend/.bundle

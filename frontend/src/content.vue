@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="hero-seo">
+      <h1>Психолог - психоаналитик</h1>
+      <p>Очные и онлайн консультации. Работаю с личными и семейными запросами.</p>
+    </div>
     <v-container class=" py-2 " >
       <v-row >
         <v-col class=" d-flex flex-column py-1" cols="12"  sm="12" md="6" lg="7" >
@@ -14,7 +18,7 @@
                 <img
                   class="foto"
                   :src="fotoSrc"
-                  alt="Людмила Наговец, психолог-психоаналитик"
+                  alt="Людмила Наговец, психолог г. Екатеринбург"
                   width="227"
                   height="275"
                   loading="eager"
@@ -411,6 +415,21 @@ onMounted(async () => {
 .posred{
   z-index: 9999;
   position: absolute;
+}
+.hero-seo{
+  padding: 0px 16px 4px;
+  text-align: center;
+}
+.hero-seo h1{
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.15;
+  color: #245c86;
+}
+.hero-seo p{
+  margin: 6px 0 0;
+  font-size: 1rem;
+  color: rgba(36, 92, 134, 0.9);
 }
 .li{
   display: flex;

@@ -8,6 +8,19 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./backend/log/postgres:/var/lib/postgresql/data/log
+    command:
+      [
+        "postgres",
+        "-c",
+        "logging_collector=on",
+        "-c",
+        "log_file_mode=0644",
+        "-c",
+        "log_directory=/var/lib/postgresql/data/log",
+        "-c",
+        "log_filename=postgresql.log"
+      ]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
@@ -17,9 +30,15 @@ services:
   redis:
     image: redis:7
     restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis_data:/data
+      - ./backend/log/redis:/data/log
+    command:
+      [
+        "sh",
+        "-lc",
+        "umask 022; exec redis-server --appendonly yes --logfile /data/log/redis.log"
+      ]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -46,9 +65,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    volumes:
+      - ./backend/log/web:/rails/log
     ports:
       - "127.0.0.1:3001:3000"
-    command: ["/bin/bash", "-lc", "./bin/rails db:prepare && bundle exec puma -C config/puma.rb"]
+    command:
+      [
+        "bash",
+        "-lc",
+        "umask 022 && cd /rails && mkdir -p log && { bundle exec rails db:prepare && exec bundle exec rails server -b 0.0.0.0 -p 3000; } >> log/web.log 2>&1"
+      ]
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:3000/up || exit 1"]
       interval: 15s
@@ -65,6 +91,8 @@ services:
     depends_on:
       web:
         condition: service_healthy
+    volumes:
+      - ./backend/log/frontend:/var/log/nginx
     ports:
       - "127.0.0.1:8081:80"
 

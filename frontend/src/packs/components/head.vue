@@ -151,7 +151,7 @@
                 </div>
               </router-link>
               <!-- <div class="d-none d-sm-flex  subti"> ПСИХОЛОГ - ПСИХОАНАЛИТИК</div> -->
-              <div class="d-none d-sm-flex  subti flex-row  "> психолог - психоаналитик 
+              <div class="d-none d-sm-flex  subti flex-row  "> психолог — психоаналитик
                 <div class="subti-phone" style="text-align: center;">
                   <a class="subti-phone-link" :href="'tel:'+ tel" >
                   тел. {{tel}}
@@ -176,7 +176,7 @@
               <div class="nagovets  nags"></div>
               <div class="bgdfa   "> </div>
               <div class="bgdfb  "> </div>
-              <div class=" subti flex-row  "> психолог–психоаналитик<br><div class="pb-1 subti-phone" style="text-align: center;">
+              <div class=" subti flex-row  "> психолог - психоаналитик<br><div class="pb-1 subti-phone" style="text-align: center;">
                   <a class="subti-phone-link" :href="'tel:'+ tel" >тел. {{tel}}</a>
               </div> 
             </div>
