@@ -427,7 +427,7 @@ onMounted(async () => {
   color: #245c86;
 }
 .hero-seo p{
-  margin: 6px 0 0;
+  margin: 0px 0 0;
   font-size: 1rem;
   color: rgba(36, 92, 134, 0.9);
 }

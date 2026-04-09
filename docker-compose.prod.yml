@@ -65,15 +65,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes:
-      - ./backend/log/web:/rails/log
     ports:
       - "127.0.0.1:3001:3000"
     command:
       [
         "bash",
         "-lc",
-        "umask 022 && cd /rails && mkdir -p log && { bundle exec rails db:prepare && exec bundle exec rails server -b 0.0.0.0 -p 3000; } >> log/web.log 2>&1"
+        "umask 022 && cd /rails && mkdir -p log && { bundle exec rails db:prepare && exec bundle exec rails server -b 0.0.0.0 -p 3000; }"
       ]
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:3000/up || exit 1"]
