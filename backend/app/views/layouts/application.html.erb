@@ -19,35 +19,6 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app %>
-    <% if Rails.env.production? %>
-      <!-- Yandex.Metrika counter start-->
-      <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-        ym(92708365, "init", {
-              clickmap:true,
-              trackLinks:true,
-              accurateTrackBounce:true
-        });
-      </script>
-      <noscript><div><img src="https://mc.yandex.ru/watch/92708365" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-83N45L5RYQ"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-83N45L5RYQ');
-      </script>
-      <!-- Yandex.Metrika counter end-->
-    <% else %>
-      <!-- Yandex.Metrika counter disabled in non-production -->
-    <% end %>
   </head>
 
   <body>

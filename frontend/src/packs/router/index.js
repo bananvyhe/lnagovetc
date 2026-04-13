@@ -51,11 +51,22 @@ const router = createRouter({
   routes,
 })
 
+const PRIVATE_ROUTE_PREFIXES = ["/admin"]
+const PRIVATE_ROUTE_PATHS = ["/Signin", "/Signup", "/todos"]
+
+const isPrivateRoute = (path, name) => {
+  if (name === "NotFound") return true
+  if (PRIVATE_ROUTE_PATHS.includes(path)) return true
+  return PRIVATE_ROUTE_PREFIXES.some((prefix) => path.startsWith(prefix))
+}
+
 router.afterEach((to) => {
   const title = to.meta?.title || "Людмила Наговец — психолог в Екатеринбурге"
   const description =
     to.meta?.description ||
     "Людмила Наговец — психолог в Екатеринбурге. Очные и онлайн консультации."
+  const privateRoute = isPrivateRoute(to.path, to.name)
+  const siteOrigin = import.meta.env.VITE_SITE_ORIGIN || "https://nagovets.ru"
 
   document.title = title
 
@@ -76,6 +87,12 @@ router.afterEach((to) => {
   ensureMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image")
   ensureMeta('meta[name="twitter:title"]', "name", "twitter:title", title)
   ensureMeta('meta[name="twitter:description"]', "name", "twitter:description", description)
+  ensureMeta(
+    'meta[name="robots"]',
+    "name",
+    "robots",
+    privateRoute ? "noindex, nofollow, noarchive" : "index, follow",
+  )
 
   let canonical = document.head.querySelector('link[rel="canonical"]')
   if (!canonical) {
@@ -83,7 +100,7 @@ router.afterEach((to) => {
     canonical.setAttribute("rel", "canonical")
     document.head.appendChild(canonical)
   }
-  canonical.setAttribute("href", `https://nagovets.ru${to.fullPath || "/"}`)
+  canonical.setAttribute("href", privateRoute ? `${siteOrigin}/` : `${siteOrigin}${to.path || "/"}`)
 })
 
 export default router

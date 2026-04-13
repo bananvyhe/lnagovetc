@@ -38,17 +38,6 @@ ym(92708365, "init", {
   `.trim()
   document.head.appendChild(ymScript)
 
-  const ymNoScript = document.createElement("noscript")
-  const ymNoScriptDiv = document.createElement("div")
-  const ymNoScriptImg = document.createElement("img")
-  ymNoScriptImg.src = "https://mc.yandex.ru/watch/92708365"
-  ymNoScriptImg.alt = ""
-  ymNoScriptImg.style.position = "absolute"
-  ymNoScriptImg.style.left = "-9999px"
-  ymNoScriptDiv.appendChild(ymNoScriptImg)
-  ymNoScript.appendChild(ymNoScriptDiv)
-  document.body.appendChild(ymNoScript)
-
   const gtagSrc = document.createElement("script")
   gtagSrc.async = true
   gtagSrc.src = "https://www.googletagmanager.com/gtag/js?id=G-83N45L5RYQ"
