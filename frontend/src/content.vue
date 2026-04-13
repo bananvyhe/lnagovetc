@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="hero-seo">
-      <h1>Психолог - психоаналитик</h1>
+    <div class="hero-seo ">
+      <h1>Психолог — психоаналитик</h1>
       <p>Очные и онлайн консультации. Работаю с личными и семейными запросами.</p>
     </div>
     <v-container class=" py-2 " >
@@ -621,10 +621,10 @@ ul.list6b{
   /*position: absolute;*/
   z-index: 4;
   float: right;
-  margin-top: -65px;
+  margin-top: -50px;
   margin-left: -50px;
   width: 227px;
-  height: 275px;
+  height: 258px;
   object-fit: cover;
   object-position: center;
   opacity: 0;

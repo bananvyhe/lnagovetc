@@ -1,7 +1,7 @@
    <template>  
     <div>
       <v-app-bar dense fixed flat hide-on-scroll rounded color="transparent" class="appbar">
-        <v-container class= "appbar-inner px-1 ">
+        <v-container class= "appbar-inner px-1">
           <div class="d-flex d-sm-flex " > 
             <v-hover>
               <template v-slot:default="{ isHovering, props }">
@@ -139,7 +139,7 @@
           </div>
         </v-list>
       </v-navigation-drawer>
-      <v-container class="main px-0 pt-0">
+      <v-container class="main px-0 pt-0  pb-1">
         <div class="headsite">
           <div class="d-none   d-md-flex head1"></div>
  
