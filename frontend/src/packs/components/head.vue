@@ -1,6 +1,6 @@
    <template>  
     <div>
-      <v-app-bar dense fixed flat hide-on-scroll rounded color="transparent" class="appbar">
+      <v-app-bar color="transparent" class="appbar" dense fixed flat hide-on-scroll rounded >
         <v-container class= "appbar-inner px-1">
           <div class="d-flex d-sm-flex " > 
             <v-hover>
@@ -759,6 +759,7 @@ margin-top: 14px;
   }
 
   .mobile-nav-drawer.v-navigation-drawer {
+    z-index: 9999 !important;
     top: 0 !important;
     height: 100dvh !important;
     max-height: 100dvh !important;
