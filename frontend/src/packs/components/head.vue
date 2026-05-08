@@ -108,7 +108,8 @@
                     <v-btn
                       class="my-2"
                       color="primary"
-                      variant="text"
+                      
+                      variant="flat"
                       @click="meshandl()">
                       Отправить
                     </v-btn>  

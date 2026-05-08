@@ -623,7 +623,7 @@ ul.list6b{
   float: right;
   margin-top: -50px;
   margin-left: -50px;
-  width: 227px;
+  width: 217px;
   height: 258px;
   object-fit: cover;
   object-position: center;
